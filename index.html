@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TNKS! Menu — Proiezione</title>
+  <!--
+    ────────────────────────────────────────────────────────────
+    DATI: letti da data.json (generato da build.js)
+    Per aggiornare il menu:
+      1. Modifica i contenuti via Sveltia CMS su /admin
+         oppure direttamente i file in content/
+      2. Esegui:  node build.js
+      3. Apri con un server locale:  npx serve .
+         (Netlify lo fa in automatico ad ogni commit)
+    ────────────────────────────────────────────────────────────
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+    }
+
+    /* ── 16:9 WRAPPER ── */
+    .wrap {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* The slide stage: always 16:9, fills the screen */
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 56.25vw;     /* 9/16 */
+      max-height: 100vh;
+      max-width: 177.78vh; /* 16/9 */
+      overflow: hidden;
+      cursor: pointer;
+      container-type: size;
+      container-name: stage;
+    }
+
+    /* ── SLIDE BASE ── */
+    .slide {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      display: none;
+      flex-direction: column;
+      padding: 3.2cqw 5.5cqw 2.5cqw;
+      color: #0E2841;
+    }
+    .slide.active { display: flex; }
+
+    /* ── SLIDE HEADER ── */
+    .sl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-shrink: 0;
+      padding-bottom: 0.7cqw;
+      border-bottom: 1px solid rgba(14,40,65,0.22);
+      margin-bottom: 0.5cqw;
+    }
+    .sl-header-title { font-size: 3.2cqw; font-weight: 700; font-style: italic; font-family: Arial, 'Helvetica Neue', sans-serif; letter-spacing: -0.01em; }
+
+    /* ── BODY: two-column flex ── */
+    .sl-body {
+      display: flex;
+      flex: 1; min-height: 0;
+    }
+    .sl-col {
+      flex: 1;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .sl-col + .sl-col {
+      margin-left: 3%;
+      padding-left: 3%;
+      border-left: 1px solid rgba(14,40,65,0.12);
+    }
+
+    /* ── SECTION LABEL (column heading) ── */
+    .sec-label {
+      font-size: 0.9cqw; font-weight: 700; font-style: italic;
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(14,40,65,0.38);
+      flex-shrink: 0;
+      padding-bottom: 0.35cqw;
+      margin-bottom: 0.4cqw;
+      border-bottom: 1px solid rgba(14,40,65,0.12);
+    }
+
+    /* ── BEER LIST ── */
+    .beer-list {
+      flex: 1; display: flex; flex-direction: column;
+      gap: 0.9cqw;
+      overflow: hidden;
+    }
+    .beer-list-right {
+      flex: 1; display: flex; flex-direction: column;
+      gap: 0.9cqw;
+      overflow: hidden;
+    }
+    .beer-item { flex-shrink: 0; }
+    .beer-row {
+      display: flex; align-items: baseline; gap: 0.4cqw;
+    }
+    .beer-name  { font-size: 2.4cqw; font-weight: 700; font-style: italic; font-family: Arial, 'Helvetica Neue', sans-serif; line-height: 1.2; }
+    .beer-sep   { flex: 1; border-bottom: 1px dotted rgba(14,40,65,0.18); margin-bottom: 0.2cqw; min-width: 0.5cqw; }
+    .beer-price { font-size: 1.6cqw; font-weight: 400; flex-shrink: 0; }
+    .beer-sub   { font-size: 1.45cqw; font-weight: 300; font-style: normal; font-family: 'Bahnschrift', 'Barlow Condensed', 'DIN Alternate', 'Franklin Gothic Medium', sans-serif; opacity: 0.68; line-height: 1.3; }
+
+    /* ── PUMP LABEL ── */
+    .pump-label {
+      font-size: 0.9cqw; font-weight: 700; font-style: italic;
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(14,40,65,0.38);
+      flex-shrink: 0;
+      padding-bottom: 0.35cqw;
+      margin-bottom: 0.4cqw;
+      border-bottom: 1px solid rgba(14,40,65,0.12);
+    }
+    /* ── PUMP SECTION (30% fondo colonna destra) ── */
+    .pump-section {
+      flex: 0 0 30%;
+      display: flex; flex-direction: column;
+      padding-top: 0.5cqw;
+      margin-top: 0.6cqw;
+      overflow: hidden;
+    }
+    .beer-list-right {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+    }
+
+    /* ── FOOTER ── */
+    .sl-footer {
+      display: flex;
+      flex-shrink: 0;
+      border-top: 1px solid rgba(14,40,65,0.22);
+      padding-top: 0.6cqw;
+      margin-top: 0.5cqw;
+    }
+    .sl-footer-col {
+      flex: 1;
+      overflow: hidden;
+    }
+    .sl-footer-col + .sl-footer-col {
+      margin-left: 3%;
+      padding-left: 3%;
+      border-left: 1px solid rgba(14,40,65,0.12);
+    }
+
+    /* ── BEVANDE FOOTER ── */
+    .bev-group { margin-bottom: 0.3cqw; }
+    .bev-group-title { font-size: 1.45cqw; font-weight: 700; font-style: italic; font-family: Arial, 'Helvetica Neue', sans-serif; line-height: 1.3; }
+    .bev-group-items { font-size: 1.05cqw; font-weight: 300; font-family: 'Bahnschrift', 'Barlow Condensed', 'DIN Alternate', 'Franklin Gothic Medium', sans-serif; opacity: 0.78; line-height: 1.5; }
+    .bev-item-row { display: flex; align-items: baseline; gap: 0.4cqw; }
+    .bev-item-name { flex: 1; }
+    .bev-item-price { font-size: 1.15cqw; font-weight: 400; flex-shrink: 0; }
+
+    /* ── DISH LIST ── */
+    .dish-list {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: space-evenly;
+      overflow: hidden;
+    }
+    .dish-item  { flex-shrink: 0; }
+    .dish-row   { display: flex; align-items: baseline; gap: 0.4cqw; }
+    .dish-name  { font-size: 2.6cqw; font-weight: 700; font-style: italic; font-family: Arial, 'Helvetica Neue', sans-serif; flex-shrink: 0; line-height: 1.2; }
+    .dish-sep   { flex: 1; border-bottom: 1px dotted rgba(14,40,65,0.22); margin-bottom: 0.22cqw; min-width: 0.5cqw; }
+    .dish-price { font-size: 1.75cqw; font-weight: 400; flex-shrink: 0; }
+    .dish-desc  {
+      font-size: 1.85cqw; font-weight: 400; font-style: normal;
+      font-family: 'Bahnschrift', 'Barlow Condensed', 'DIN Alternate', 'Franklin Gothic Medium', sans-serif;
+      opacity: 0.88; line-height: 1.35;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .dish-info  { font-size: 1.25cqw; font-weight: 300; font-family: 'Bahnschrift', 'Barlow Condensed', 'DIN Alternate', 'Franklin Gothic Medium', sans-serif; opacity: 0.58; margin-top: 0.1cqw; }
+
+    /* ── PROGRESS BAR ── */
+    .pbar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 0.3cqw;
+      background: rgba(14,40,65,0.18);
+      transform-origin: left; transform: scaleX(0);
+      z-index: 10;
+    }
+
+    /* ── NAV DOTS ── */
+    .nav-dots {
+      position: absolute; bottom: 1.2%; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 0.7cqw;
+      z-index: 20;
+    }
+    .dot {
+      width: 0.85cqw; height: 0.85cqw;
+      border-radius: 50%;
+      border: 0.12cqw solid rgba(14,40,65,0.5);
+      background: rgba(14,40,65,0.15);
+      cursor: pointer; transition: background 0.3s;
+    }
+    .dot.on { background: rgba(14,40,65,0.78); }
+
+    /* ── SLIDE NUMBER ── */
+    .snum {
+      position: absolute; top: 2.5%; right: 4%;
+      font-size: 1.0cqw; font-weight: 600;
+      letter-spacing: 0.15em; color: rgba(14,40,65,0.3);
+      z-index: 5;
+    }
+
+    /* ── STATUS OVERLAY (loading / error) ── */
+    #status {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: #f5f3ef;
+      color: #0E2841;
+      z-index: 100;
+      text-align: center;
+      padding: 4cqw;
+    }
+    #status h2   { font-size: 1.8cqw; margin-bottom: 1cqw; }
+    #status code { font-family: monospace; font-size: 1.3cqw; background: rgba(14,40,65,0.08); padding: 0.4cqw 0.8cqw; border-radius: 4px; display: block; margin: 0.4cqw auto; }
+    #status p    { font-size: 1.15cqw; opacity: 0.7; margin-top: 0.5cqw; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+<div class="stage" id="stage">
+
+  <!-- Status overlay (loading / error) — nascosto dopo init -->
+  <div id="status">
+    <h2>Caricamento menu…</h2>
+  </div>
+
+  <!-- Nav dots (costruiti da JS) -->
+  <div class="nav-dots" id="dots"></div>
+
+</div><!-- /stage -->
+</div><!-- /wrap -->
+
+<script>
+const BG = ['static/bg/bg1.jpg','static/bg/bg2.jpg','static/bg/bg3.jpg'];
+const TOTAL = 3;
+
+let current = 0;
+let slides = [], dotEls = [], pbars = [];
+
+/* ── UTILS ────────────────────────────────────────────────── */
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDiet(arr) {
+  if (!Array.isArray(arr) || !arr.length) return '';
+  const map = { vegetarian:'VEGETARIAN', vegan:'VEGAN', gluten_free:'GLUTEN FREE' };
+  return arr.map(v => map[v] || v.toUpperCase()).join(' / ');
+}
+
+function dishInfo(p) {
+  const diet = fmtDiet(p.info_dietetica);
+  const opzione   = p.opzione   || '-----';
+  const allergeni = p.allergeni || '-----';
+  const oa = `${opzione} / ${allergeni}`;
+  return diet ? `${diet} · ${oa}` : oa;
+}
+
+/* ── ITEM HTML BUILDERS ───────────────────────────────────── */
+function beerItemHTML(b) {
+  const sub = [b.stile, b.info, b.gradazione]
+    .filter(Boolean).join(' / ')
+    + (b.birrificio ? ' — ' + b.birrificio : '');
+  const price = b.prezzo_piccolo ? `${b.prezzo_piccolo}€` : '';
+  return `<div class="beer-item">
+    <div class="beer-row">
+      <span class="beer-name">${esc(b.nome)}</span>
+      <span class="beer-sep"></span>
+      <span class="beer-price">${price}</span>
+    </div>
+    <div class="beer-sub">${esc(sub)}</div>
+  </div>`;
+}
+
+function dishItemHTML(p) {
+  const info = dishInfo(p);
+  const price = p.prezzo ? `${p.prezzo}€` : '';
+  return `<div class="dish-item">
+    <div class="dish-row">
+      <span class="dish-name">${esc(p.nome)}</span>
+      <span class="dish-sep"></span>
+      <span class="dish-price">${price}</span>
+    </div>
+    ${p.descrizione ? `<div class="dish-desc">${esc(p.descrizione)}</div>` : ''}
+    ${info ? `<div class="dish-info">${esc(info)}</div>` : ''}
+  </div>`;
+}
+
+/* ── SLIDE 1: BIRRE + BEVANDE ─────────────────────────────── */
+function buildSlide1(birre, bevande, vini) {
+  const tap      = birre.filter(b => b.categoria === 'tap');
+  const pump     = birre.filter(b => b.categoria === 'pump');
+  const half     = Math.ceil(tap.length * 2 / 3);
+  const tapLeft  = tap.slice(0, half);
+  const tapRight = tap.slice(half);
+
+  // Footer left: fermentati → soft_drink → liquori
+  const fermentati = bevande.filter(b => b.categoria === 'fermentati');
+  const soft       = bevande.filter(b => b.categoria === 'soft_drink');
+
+  const footerLeft = [
+    fermentati.length
+      ? `<div class="bev-group">
+           <div class="bev-group-title">FERMENTATI / KOMBUCHA / SIDRI</div>
+           <div class="bev-group-items">${
+             fermentati.map(b =>
+               `<div class="bev-item-row">
+                  <span class="bev-item-name">${esc(b.nome)}</span>
+                  ${b.prezzo ? `<span class="bev-item-price">${b.prezzo}€</span>` : ''}
+                </div>`
+             ).join('')
+           }</div>
+         </div>`
+      : '',
+    `<div class="bev-group">
+       <div class="bev-group-title">SOFT DRINK</div>
+       <div class="bev-group-items">${
+         soft.length
+           ? soft.map(b =>
+               `<div class="bev-item-row">
+                  <span class="bev-item-name">${esc(b.descrizione || b.nome)}</span>
+                  ${b.prezzo ? `<span class="bev-item-price">${b.prezzo}€</span>` : ''}
+                </div>`
+             ).join('')
+           : 'Coca Cola / Zero / Chinotto / Succo di frutta'
+       }</div>
+     </div>`,
+    `<div class="bev-group"><div class="bev-group-title">LIQUORI / AMARI</div></div>`,
+  ].join('');
+
+  // Footer right: natural wine → cocktails
+  const naturali  = vini.filter(v => v.tipologia === 'naturale');
+  const cocktails = bevande.filter(b => b.categoria === 'cocktail');
+
+  const footerRight = `
+    <div class="bev-group">
+      <div class="bev-group-title">NATURAL WINE</div>
+      <div class="bev-group-items">${
+        naturali.length
+          ? naturali.map(v =>
+              `<div class="bev-item-row">
+                 <span class="bev-item-name">${esc(v.nome)}</span>
+                 ${v.prezzo_calice ? `<span class="bev-item-price">${v.prezzo_calice}€</span>` : ''}
+               </div>`
+            ).join('')
+          : 'Mescita / Bottiglia'
+      }</div>
+    </div>
+    <div class="bev-group">
+      <div class="bev-group-title">COCKTAILS</div>
+      <div class="bev-group-items">${
+        cocktails.length
+          ? cocktails.map(c =>
+              `<div class="bev-item-row">
+                 <span class="bev-item-name">${esc(c.nome)}</span>
+                 ${c.prezzo ? `<span class="bev-item-price">${c.prezzo}€</span>` : ''}
+               </div>`
+            ).join('')
+          : ''
+      }</div>
+    </div>`;
+
+  const div = document.createElement('div');
+  div.className = 'slide';
+  div.style.backgroundImage = `url('${BG[0]}')`;
+  div.innerHTML = `
+    <div class="snum">01 / ${TOTAL}</div>
+    <div class="sl-header">
+      <span class="sl-header-title">BEER / TAP LIST</span>
+    </div>
+    <div class="sl-body">
+      <div class="sl-col">
+        <div class="beer-list">${tapLeft.map(beerItemHTML).join('')}</div>
+      </div>
+      <div class="sl-col">
+        <div class="beer-list-right">${tapRight.map(beerItemHTML).join('')}</div>
+        ${pump.length ? `<div class="pump-section"><div class="pump-label">ON PUMP</div><div class="beer-list">${pump.map(beerItemHTML).join('')}</div></div>` : ''}
+      </div>
+    </div>
+    <div class="sl-footer">
+      <div class="sl-footer-col">${footerLeft}</div>
+      <div class="sl-footer-col">${footerRight}</div>
+    </div>
+    <div class="pbar"></div>`;
+  return div;
+}
+
+/* ── SLIDE 2: ANTIPASTI + PRIMI ───────────────────────────── */
+function buildSlide2(piatti) {
+  const antipasti = piatti.filter(p => p.categoria === 'antipasto');
+  const primi     = piatti.filter(p => p.categoria === 'primo');
+
+  const div = document.createElement('div');
+  div.className = 'slide';
+  div.style.backgroundImage = `url('${BG[1]}')`;
+  div.innerHTML = `
+    <div class="snum">02 / ${TOTAL}</div>
+    <div class="sl-body">
+      <div class="sl-col">
+        <div class="sec-label">Antipasti</div>
+        <div class="dish-list">${antipasti.map(dishItemHTML).join('')}</div>
+      </div>
+      <div class="sl-col">
+        <div class="sec-label">Primi</div>
+        <div class="dish-list">${primi.map(dishItemHTML).join('')}</div>
+      </div>
+    </div>
+    <div class="pbar"></div>`;
+  return div;
+}
+
+/* ── SLIDE 3: SECONDI + DOLCI ─────────────────────────────── */
+function buildSlide3(piatti) {
+  const secondi = piatti.filter(p => p.categoria === 'secondo');
+  const dolci   = piatti.filter(p => p.categoria === 'dolce');
+  const half    = Math.ceil(secondi.length / 2);
+
+  const div = document.createElement('div');
+  div.className = 'slide';
+  div.style.backgroundImage = `url('${BG[2]}')`;
+  div.innerHTML = `
+    <div class="snum">03 / ${TOTAL}</div>
+    <div class="sl-body">
+      <div class="sl-col">
+        <div class="sec-label">Secondi</div>
+        <div class="dish-list">${secondi.slice(0, half).map(dishItemHTML).join('')}</div>
+      </div>
+      <div class="sl-col">
+        <div class="sec-label">&nbsp;</div>
+        <div class="dish-list">${secondi.slice(half).map(dishItemHTML).join('')}</div>
+      </div>
+    </div>
+    ${dolci.length ? `
+    <div class="sl-footer" style="border-top:none;margin-top:1.2cqw">
+      <div class="sec-label" style="width:100%;border-bottom:none">Dolci</div>
+    </div>
+    <div class="sl-footer" style="margin-top:0.4cqw">
+      ${dolci.map(d => `<div class="sl-footer-col">${dishItemHTML(d)}</div>`).join('')}
+    </div>` : ''}
+    <div class="pbar"></div>`;
+  return div;
+}
+
+/* ── SLIDESHOW ────────────────────────────────────────────── */
+function goTo(idx) {
+  slides[current].classList.remove('active');
+  dotEls[current].classList.remove('on');
+  pbars[current].style.transition = 'none';
+  pbars[current].style.transform  = 'scaleX(0)';
+
+  current = ((idx % slides.length) + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  dotEls[current].classList.add('on');
+
+
+}
+
+/* ── INIT ─────────────────────────────────────────────────── */
+async function init() {
+  const statusEl = document.getElementById('status');
+  let data;
+  try {
+    const r = await fetch('data.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    data = await r.json();
+  } catch (e) {
+    statusEl.innerHTML = `
+      <h2>Impossibile caricare i dati del menu</h2>
+      <p>Esegui prima il build:</p>
+      <code>node build.js</code>
+      <p>Poi apri con un server locale:</p>
+      <code>npx serve .</code>
+      <p style="margin-top:1cqw;font-size:1cqw">(${esc(e.message)})</p>`;
+    return;
+  }
+
+  const stage  = document.getElementById('stage');
+  const dotsEl = document.getElementById('dots');
+
+  const slideEls = [
+    buildSlide1(data.birre || [], data.bevande || [], data.vini || []),
+    buildSlide2(data.piatti || []),
+    buildSlide3(data.piatti || []),
+  ];
+
+  slideEls.forEach((sl, i) => {
+    stage.insertBefore(sl, dotsEl);
+    slides.push(sl);
+    pbars.push(sl.querySelector('.pbar'));
+
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); });
+    dotsEl.appendChild(dot);
+    dotEls.push(dot);
+  });
+
+  statusEl.style.display = 'none';
+  goTo(0);
+}
+
+/* ── EVENTI ───────────────────────────────────────────────── */
+document.getElementById('stage').addEventListener('click', e => {
+  if (slides.length && !e.target.classList.contains('dot')) goTo(current + 1);
+});
+
+document.addEventListener('keydown', e => {
+  if (!slides.length) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft')                    { e.preventDefault(); goTo(current - 1); }
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+init();
+</script>
+
+</body>
+</html>
