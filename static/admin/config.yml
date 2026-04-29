@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ricky1192/tnkswebmenu
   branch: main
-  base_url: https://tnkswebmenu.netlify.app  # oppure il tuo auth endpoint
+  base_url: https://api.netlify.com
 
 # Per sviluppo locale con npx sveltia-cms-proxy-server
 # local_backend: true
