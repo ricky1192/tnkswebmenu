@@ -3,6 +3,11 @@
   publish = "."
 
 [[redirects]]
+  from = "/admin/config.yml"
+  to = "/static/admin/config.yml"
+  status = 200
+
+[[redirects]]
   from = "/admin"
   to = "/static/admin/index.html"
   status = 200
