@@ -5,7 +5,7 @@ backend:
   base_url: https://tnkswebmenu.netlify.app  # oppure il tuo auth endpoint
 
 # Per sviluppo locale con npx sveltia-cms-proxy-server
-local_backend: true
+# local_backend: true
 
 media_folder: static/images
 public_folder: /images
