@@ -1,3 +1,13 @@
 [build]
   command = "node build.js"
   publish = "."
+
+[[redirects]]
+  from = "/admin"
+  to = "/static/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/static/admin/index.html"
+  status = 200
