@@ -18,7 +18,7 @@ collections:
   # BIRRE
   # ──────────────────────────────────────────────
   - name: birre
-    label: "🍺 Birre"
+    label: "Birre"
     label_singular: "Birra"
     folder: content/birre
     create: true
@@ -99,7 +99,7 @@ collections:
   # PIATTI
   # ──────────────────────────────────────────────
   - name: piatti
-    label: "🍽️ Piatti"
+    label: "Piatti"
     label_singular: "Piatto"
     folder: content/piatti
     create: true
@@ -175,7 +175,7 @@ collections:
   # VINI
   # ──────────────────────────────────────────────
   - name: vini
-    label: "🍷 Vini"
+    label: "Vini"
     label_singular: "Vino"
     folder: content/vini
     create: true
@@ -256,7 +256,7 @@ collections:
   # ALTRE BEVANDE (Cocktail, Fermentati, Soft drink)
   # ──────────────────────────────────────────────
   - name: bevande
-    label: "🥤 Altre Bevande"
+    label: "Altre Bevande"
     label_singular: "Bevanda"
     folder: content/bevande
     create: true
