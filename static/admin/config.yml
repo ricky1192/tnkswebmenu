@@ -1,0 +1,298 @@
+backend:
+  name: github
+  repo: ricky1192/tnkswebmenu
+  branch: main
+  base_url: https://tnkswebmenu.netlify.app  # oppure il tuo auth endpoint
+
+# Per sviluppo locale con npx sveltia-cms-proxy-server
+local_backend: true
+
+media_folder: static/images
+public_folder: /images
+
+locale: it
+
+collections:
+
+  # ──────────────────────────────────────────────
+  # BIRRE
+  # ──────────────────────────────────────────────
+  - name: birre
+    label: "🍺 Birre"
+    label_singular: "Birra"
+    folder: content/birre
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nome
+    summary: "{{nome}} — {{stile}} — {{gradazione}}"
+    sortable_fields: [ordine, nome, categoria]
+    view_groups:
+      - label: Categoria
+        field: categoria
+    fields:
+      - label: "Nome birra"
+        name: nome
+        widget: string
+        hint: "Max 20 caratteri"
+        pattern: [".{1,20}", "Massimo 20 caratteri"]
+
+      - label: "Stile"
+        name: stile
+        widget: string
+        hint: "Es. IPA, Blanche, Schwarzbier — max 20 caratteri"
+        pattern: [".{1,20}", "Massimo 20 caratteri"]
+
+      - label: "Gradazione alcolica"
+        name: gradazione
+        widget: string
+        hint: "Es. 5,0%"
+        pattern: ["^\\d{1,2}[,.]\\d%?$", "Formato: XX,X%"]
+        required: false
+
+      - label: "Info speciale"
+        name: info
+        widget: string
+        hint: "Gluten Free, Frutta Special, Edition, Anno Prod. — max 15 caratteri"
+        pattern: [".{0,15}", "Massimo 15 caratteri"]
+        required: false
+
+      - label: "Birrificio / Collaborazione"
+        name: birrificio
+        widget: string
+        hint: "Includi eventuali collaborazioni — max 35 caratteri"
+        pattern: [".{1,35}", "Massimo 35 caratteri"]
+
+      - label: "Categoria"
+        name: categoria
+        widget: select
+        options:
+          - { label: "Spina (TAP)", value: tap }
+          - { label: "Pompa (ON PUMP)", value: pump }
+          - { label: "Bottiglia / Lattina", value: bottiglia }
+        default: tap
+
+      - label: "Prezzo piccola (cl)"
+        name: prezzo_piccolo
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+        required: false
+        hint: "Prezzo formato piccolo (es. 0,4 cl)"
+
+      - label: "Prezzo grande (cl)"
+        name: prezzo_grande
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+        required: false
+        hint: "Prezzo formato grande"
+
+      - label: "Ordine di visualizzazione"
+        name: ordine
+        widget: number
+        default: 99
+        hint: "Numero più basso = prima in lista"
+
+  # ──────────────────────────────────────────────
+  # PIATTI
+  # ──────────────────────────────────────────────
+  - name: piatti
+    label: "🍽️ Piatti"
+    label_singular: "Piatto"
+    folder: content/piatti
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nome
+    summary: "{{nome}} — €{{prezzo}}"
+    sortable_fields: [ordine, nome, categoria]
+    view_groups:
+      - label: Categoria
+        field: categoria
+    fields:
+      - label: "Nome piatto"
+        name: nome
+        widget: string
+        hint: "Max 25 caratteri"
+        pattern: [".{1,25}", "Massimo 25 caratteri"]
+
+      - label: "Descrizione"
+        name: descrizione
+        widget: text
+        hint: "Max 150 caratteri"
+        pattern: [".{0,150}", "Massimo 150 caratteri"]
+        required: false
+
+      - label: "Prezzo (€)"
+        name: prezzo
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+
+      - label: "Categoria"
+        name: categoria
+        widget: select
+        options:
+          - { label: "Antipasto / Snack", value: antipasto }
+          - { label: "Primo", value: primo }
+          - { label: "Secondo", value: secondo }
+          - { label: "Dolce", value: dolce }
+        default: antipasto
+
+      - label: "Info dietetica"
+        name: info_dietetica
+        widget: select
+        multiple: true
+        required: false
+        options:
+          - { label: "Vegetarian", value: vegetarian }
+          - { label: "Vegan", value: vegan }
+          - { label: "Gluten Free", value: gluten_free }
+          - { label: "Senza Lattosio", value: senza_lattosio }
+        hint: "Puoi selezionare più opzioni"
+
+      - label: "Allergeni"
+        name: allergeni
+        widget: string
+        hint: "Numeri allergeni separati da trattino — es. 1-3-7 — max 15 caratteri"
+        pattern: [".{0,15}", "Massimo 15 caratteri"]
+        required: false
+
+      - label: "Opzione alternative"
+        name: opzione
+        widget: string
+        hint: "Es. 'opzione VEGAN', 'opzione GLUTEN FREE'"
+        required: false
+
+      - label: "Ordine di visualizzazione"
+        name: ordine
+        widget: number
+        default: 99
+
+  # ──────────────────────────────────────────────
+  # VINI
+  # ──────────────────────────────────────────────
+  - name: vini
+    label: "🍷 Vini"
+    label_singular: "Vino"
+    folder: content/vini
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nome
+    summary: "{{nome}} — {{cantina}} — {{tipologia}}"
+    sortable_fields: [ordine, nome, tipologia]
+    view_groups:
+      - label: Tipologia
+        field: tipologia
+    fields:
+      - label: "Nome vino"
+        name: nome
+        widget: string
+        hint: "Max 20 caratteri"
+        pattern: [".{1,20}", "Massimo 20 caratteri"]
+
+      - label: "Cantina / Azienda"
+        name: cantina
+        widget: string
+        hint: "Max 30 caratteri"
+        pattern: [".{1,30}", "Massimo 30 caratteri"]
+
+      - label: "Uvaggio"
+        name: uvaggio
+        widget: string
+        hint: "Blend o vitigno singolo — max 50 caratteri"
+        pattern: [".{0,50}", "Massimo 50 caratteri"]
+        required: false
+
+      - label: "Gradazione alcolica"
+        name: gradazione
+        widget: string
+        hint: "Es. 13,0%"
+        required: false
+
+      - label: "Provenienza geografica"
+        name: provenienza
+        widget: string
+        hint: "Regione / Città / Provincia — max 30 caratteri"
+        pattern: [".{0,30}", "Massimo 30 caratteri"]
+        required: false
+
+      - label: "Tipologia"
+        name: tipologia
+        widget: select
+        options:
+          - { label: "Rosso", value: rosso }
+          - { label: "Bianco", value: bianco }
+          - { label: "Rosato", value: rosato }
+          - { label: "Natural Wine", value: naturale }
+          - { label: "Spumante / Bollicine", value: spumante }
+          - { label: "Dolce / Dessert", value: dolce }
+        default: bianco
+
+      - label: "Prezzo al calice (€)"
+        name: prezzo_calice
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+        required: false
+
+      - label: "Prezzo a bottiglia (€)"
+        name: prezzo_bottiglia
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+        required: false
+
+      - label: "Ordine di visualizzazione"
+        name: ordine
+        widget: number
+        default: 99
+
+  # ──────────────────────────────────────────────
+  # ALTRE BEVANDE (Cocktail, Fermentati, Soft drink)
+  # ──────────────────────────────────────────────
+  - name: bevande
+    label: "🥤 Altre Bevande"
+    label_singular: "Bevanda"
+    folder: content/bevande
+    create: true
+    slug: "{{slug}}"
+    identifier_field: nome
+    summary: "{{nome}} — {{categoria}}"
+    fields:
+      - label: "Nome"
+        name: nome
+        widget: string
+
+      - label: "Descrizione / Ingredienti"
+        name: descrizione
+        widget: string
+        required: false
+        hint: "Es. ingredienti cocktail o varianti disponibili"
+
+      - label: "Categoria"
+        name: categoria
+        widget: select
+        options:
+          - { label: "Cocktail", value: cocktail }
+          - { label: "Fermentati / Kombucha / Sidro", value: fermentati }
+          - { label: "Soft Drink", value: soft_drink }
+          - { label: "Acqua / Caffetteria", value: altro }
+        default: cocktail
+
+      - label: "Prezzo (€)"
+        name: prezzo
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.5
+        required: false
+
+      - label: "Ordine"
+        name: ordine
+        widget: number
+        default: 99

@@ -1,0 +1,285 @@
+{
+  "birre": [
+    {
+      "nome": 1994,
+      "stile": "Hausbier",
+      "gradazione": "5,0%",
+      "info": "GF",
+      "birrificio": "Birrificio Sabino",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 1
+    },
+    {
+      "nome": "DIANA",
+      "stile": "Blanche con Sambuco",
+      "gradazione": "5,2%",
+      "info": "",
+      "birrificio": "Fustock",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 2
+    },
+    {
+      "nome": "CALIMA",
+      "stile": "Schwarzbier",
+      "gradazione": "5,0%",
+      "info": "",
+      "birrificio": "TNKS! + Birrificio La Gramigna",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 3
+    },
+    {
+      "nome": "FRAGOSETTA",
+      "stile": "Gose alle Fragole",
+      "gradazione": "3,7%",
+      "info": "",
+      "birrificio": "TNKS! + MostoItaliano",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 4
+    },
+    {
+      "nome": "CHIWAWA",
+      "stile": "Session IPA",
+      "gradazione": "4,8%",
+      "info": "GF",
+      "birrificio": "Resaka Brewing Tribe",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 5
+    },
+    {
+      "nome": "2-IPAC",
+      "stile": "West Coast DIPA",
+      "gradazione": "7,5%",
+      "info": "",
+      "birrificio": "Resaka Brewing Tribe",
+      "categoria": "tap",
+      "prezzo_piccolo": 7,
+      "prezzo_grande": 9,
+      "ordine": 6
+    },
+    {
+      "nome": "CADREGA",
+      "stile": "Quadrupel",
+      "gradazione": "9,3%",
+      "info": "",
+      "birrificio": "Fustock",
+      "categoria": "tap",
+      "prezzo_piccolo": 7,
+      "prezzo_grande": 9,
+      "ordine": 7
+    },
+    {
+      "nome": "ACCIA",
+      "stile": "IPA",
+      "gradazione": "6,5%",
+      "info": "",
+      "birrificio": "Birrificio Sabino",
+      "categoria": "tap",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 8
+    },
+    {
+      "nome": "COCHISE",
+      "stile": "Baltic Porter",
+      "gradazione": "7,0%",
+      "info": "",
+      "birrificio": "Radiocraft + Collerosso",
+      "categoria": "pump",
+      "prezzo_piccolo": 6,
+      "prezzo_grande": 8,
+      "ordine": 9
+    }
+  ],
+  "piatti": [
+    {
+      "nome": "FRIES",
+      "descrizione": "Patatine fritte con salsa creola e pepe rosa",
+      "prezzo": 6,
+      "categoria": "antipasto",
+      "info_dietetica": [
+        "vegetarian",
+        "vegan",
+        "gluten_free"
+      ],
+      "allergeni": "1-3",
+      "opzione": "opzione VEGAN",
+      "ordine": 1
+    },
+    {
+      "nome": "CROSTONE",
+      "descrizione": "Crostone alla brace con pancia di maiale CBT, puntarelle, alici e melograno",
+      "prezzo": 8,
+      "categoria": "antipasto",
+      "info_dietetica": [],
+      "allergeni": "1-4-6",
+      "ordine": 2
+    },
+    {
+      "nome": "CHICKEN THAI",
+      "descrizione": "Chicken bites con salsa sweet chili, semi di sesamo ed erba cipollina",
+      "prezzo": 8,
+      "categoria": "antipasto",
+      "info_dietetica": [],
+      "allergeni": "1-3-6-7-10-11",
+      "ordine": 3
+    },
+    {
+      "nome": "CARCIOFO",
+      "descrizione": "Carciofo condito alla romana e cotto alla brace con fonduta di parmigiano, uovo marinato e prosciutto d'anatra",
+      "prezzo": 10,
+      "categoria": "antipasto",
+      "info_dietetica": [
+        "gluten_free"
+      ],
+      "allergeni": "3-7",
+      "opzione": "opzione VEGETARIAN",
+      "ordine": 4
+    },
+    {
+      "nome": "BOTTONI",
+      "descrizione": "Bottoni di pasta fatti a mano, ripieni di carne di cappone, con fondo di pollo, mandorle ed erba cedrina",
+      "prezzo": 14,
+      "categoria": "primo",
+      "info_dietetica": [],
+      "allergeni": "1-3-7-8-9",
+      "ordine": 5
+    },
+    {
+      "nome": "CANNELLONI",
+      "descrizione": "Cannelloni fatti a mano ripieni di ricotta di capra, con besciamella agli asparagi, vignarola alla brace, fondo vegetale e cipolla croccante",
+      "prezzo": 16,
+      "categoria": "primo",
+      "info_dietetica": [
+        "vegetarian"
+      ],
+      "allergeni": "1-3-7-9",
+      "ordine": 6
+    },
+    {
+      "nome": "TAGLIOLINO",
+      "descrizione": "Tagliolino fatto a mano, con ragù di cortile, burro acido, cime di rapa scottate alla brace e polvere di frutti rossi",
+      "prezzo": 16,
+      "categoria": "primo",
+      "info_dietetica": [],
+      "allergeni": "1-3-4-7-9",
+      "opzione": "opzione GLUTEN FREE",
+      "ordine": 7
+    },
+    {
+      "nome": "MELANZANA",
+      "descrizione": "Melanzana laccata al miso, sesamo ed erba cipollina, misticanza spontanea, mela e gel di limone fermentato",
+      "prezzo": 12,
+      "categoria": "secondo",
+      "info_dietetica": [
+        "vegan",
+        "gluten_free"
+      ],
+      "allergeni": 11,
+      "ordine": 8
+    },
+    {
+      "nome": "RADICCHIO ALLA BRACE",
+      "descrizione": "Radicchio alla brace, fonduta di blue di vacca, Kumquat sciroppato e mirto",
+      "prezzo": 12,
+      "categoria": "secondo",
+      "info_dietetica": [
+        "vegetarian",
+        "gluten_free"
+      ],
+      "allergeni": 7,
+      "ordine": 9
+    },
+    {
+      "nome": "PAJATA",
+      "descrizione": "Pajata alla saltimbocca cotta con burro e salvia, guanciale e salvia fritta",
+      "prezzo": 14,
+      "categoria": "secondo",
+      "info_dietetica": [],
+      "allergeni": "1-7",
+      "ordine": 10
+    },
+    {
+      "nome": "OSSOBUCO",
+      "descrizione": "Ossobuco cotto al tegame con purè alla Robuschon, olio piccante e erba cipollina",
+      "prezzo": 18,
+      "categoria": "secondo",
+      "info_dietetica": [],
+      "allergeni": "1-7-9",
+      "ordine": 11
+    },
+    {
+      "nome": "QUAGLIA",
+      "descrizione": "Quaglia alla brace ripiena con fegatini di pollo, piselli e spinaci, accompagnata da indivia belga alla brace e gel di mandarino",
+      "prezzo": 20,
+      "categoria": "secondo",
+      "info_dietetica": [
+        "gluten_free"
+      ],
+      "allergeni": 9,
+      "ordine": 12
+    },
+    {
+      "nome": "NAMELAKA",
+      "descrizione": "Namelaka al cioccolato fondente, lamponi, olio al basilico e sale maldon",
+      "prezzo": 6,
+      "categoria": "dolce",
+      "info_dietetica": [
+        "gluten_free"
+      ],
+      "allergeni": 7,
+      "ordine": 13
+    },
+    {
+      "nome": "CHEESECAKE",
+      "descrizione": "Cheesecake basca alla banana con caramello salato e arachidi tostati",
+      "prezzo": 6,
+      "categoria": "dolce",
+      "info_dietetica": [
+        "gluten_free"
+      ],
+      "allergeni": "3-5-7",
+      "ordine": 14
+    }
+  ],
+  "bevande": [
+    {
+      "nome": "Coca Cola / Zero / Chinotto",
+      "descrizione": "Coca Cola, Coca Cola Zero, Chinotto, Succo di frutta",
+      "categoria": "soft_drink",
+      "prezzo": 4,
+      "ordine": 1
+    },
+    {
+      "nome": "TNKS! Spritz Vermouth / Spritz Bitter",
+      "descrizione": "",
+      "categoria": "cocktail",
+      "prezzo": 7,
+      "ordine": 1
+    },
+    {
+      "nome": "Gin Tonic/Gin Tonic / Gin Lemon / Vodka Tonic / Vodka Lemon / Negroni / Negroni sbagliato / Americano",
+      "descrizione": "",
+      "categoria": "cocktail",
+      "prezzo": 8,
+      "ordine": 2
+    },
+    {
+      "nome": "Kombucha / Sidri",
+      "descrizione": "Kombucha / Sidri",
+      "categoria": "soft_drink",
+      "prezzo": 4,
+      "ordine": 2
+    }
+  ],
+  "vini": []
+}
